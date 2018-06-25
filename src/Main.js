@@ -1,24 +1,14 @@
+import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
-import { applyMiddleware, createStore } from 'redux'
-import {
-  connectRouter,
-  routerMiddleware,
-  ConnectedRouter,
-} from 'connected-react-router'
 import { createBrowserHistory } from 'history'
-import { hot } from 'react-hot-loader'
 import React, { Component } from 'react'
-import thunk from 'redux-thunk'
 
 import App from './components/App'
-import reducer from './store/reducer'
+import configureStore from './configureStore'
 
 const history = createBrowserHistory()
-
-const store = createStore(
-  connectRouter(history)(reducer),
-  applyMiddleware(routerMiddleware(history), thunk),
-)
+const initialState = {}
+const store = configureStore(initialState, history)
 
 class Main extends Component {
   render() {
@@ -32,4 +22,4 @@ class Main extends Component {
   }
 }
 
-export default hot(module)(Main)
+export default Main

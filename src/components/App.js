@@ -1,6 +1,7 @@
 import React from 'react'
+import { hot } from 'react-hot-loader'
 
-export default class App extends React.Component {
+class App extends React.Component {
   render() {
     return (
       <section className="todoapp">
@@ -61,3 +62,5 @@ export default class App extends React.Component {
     )
   }
 }
+
+export default hot(module)(App)
