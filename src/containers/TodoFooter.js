@@ -1,27 +1,52 @@
-import React, { PureComponent } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import React from 'react'
+import compose from 'lodash/fp/flowRight'
 
-class TodoFooter extends PureComponent {
+import { clearCompletedTodos } from '../store/todos/todos.actions'
+import { computeIncompleteTodoCount } from '../store/todos/todos.selectors'
+import FilterLink from '../components/FilterLink'
+
+class TodoFooter extends React.Component {
   render() {
     return (
       <footer className="footer">
         <span className="todo-count">
-          <strong>2 items left</strong>
+          <strong>{this.props.incompleteTodoCount} items left</strong>
         </span>
         <ul className="filters">
-          <li>
-            <a className="selected">All</a>
-          </li>
-          <li>
-            <a>Active</a>
-          </li>
-          <li>
-            <a>Completed</a>
-          </li>
+          <FilterLink to="/">All</FilterLink>
+          <FilterLink to="/active">Active</FilterLink>
+          <FilterLink to="/completed">Completed</FilterLink>
         </ul>
-        <button className="clear-completed">Clear completed</button>
+        <button
+          className="clear-completed"
+          onClick={this.props.clearCompletedTodos}
+        >
+          Clear completed
+        </button>
       </footer>
     )
   }
 }
 
-export default TodoFooter
+const mapStateToProps = state => ({
+  incompleteTodoCount: computeIncompleteTodoCount(state),
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      clearCompletedTodos,
+    },
+    dispatch,
+  )
+
+export default compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(TodoFooter)

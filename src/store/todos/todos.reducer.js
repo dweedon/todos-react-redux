@@ -60,6 +60,12 @@ export default function todosReducer(state = todoState, action) {
         ...state,
         records: state.records.filter(todo => todo.id !== action.payload),
       }
+    case 'CLEAR_COMPLETED_TODOS': {
+      return {
+        ...state,
+        records: state.records.filter(todo => !todo.complete),
+      }
+    }
     case 'MARK_ALL_COMPLETE':
       return {
         ...state,

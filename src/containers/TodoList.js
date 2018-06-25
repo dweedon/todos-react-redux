@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import React, { PureComponent } from 'react'
 
+import { computeTodos } from '../store/todos/todos.selectors'
 import {
   deleteTodo,
   endEditTodoText,
@@ -10,7 +11,6 @@ import {
   setTodoComplete,
   startEditTodoText,
 } from '../store/todos/todos.actions'
-import { selectTodos } from '../store/todos/todos.selectors'
 import Todo from '../components/Todo'
 
 class TodoList extends PureComponent {
@@ -53,7 +53,7 @@ class TodoList extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  todos: selectTodos(state),
+  todos: computeTodos(state),
 })
 
 const mapDispatchToProps = dispatch =>

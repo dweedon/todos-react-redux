@@ -23,6 +23,10 @@ export const endEditTodoText = (id, text) => ({
   payload: { id, text },
 })
 
+export const clearCompletedTodos = () => ({
+  type: 'CLEAR_COMPLETED_TODOS',
+})
+
 export const markAllComplete = () => ({
   type: 'MARK_ALL_COMPLETE',
 })
