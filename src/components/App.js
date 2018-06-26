@@ -3,15 +3,47 @@ import { hot } from 'react-hot-loader'
 import React from 'react'
 import compose from 'lodash/fp/flowRight'
 
+import { addTodo } from '../store/todos/todos.actions'
 import { selectTodos } from '../store/todos/todos.selectors'
 
 class App extends React.Component {
+  state = {
+    newTodoText: '',
+  }
+
+  handleNewTodoTextChange = e => {
+    debugger // eslint-disable-line
+    this.setState({ newTodoText: e.target.value })
+  }
+
+  handleNewTodoKeyDown = e => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      this.setState({ newTodoText: '' })
+    }
+  }
+
+  handleOnNewTodoSubmit = e => {
+    e.stopPropagation()
+    e.preventDefault()
+    this.props.dispatchAddTodo(this.state.newTodoText)
+    this.setState({ newTodoText: '' })
+  }
+
   render() {
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <input className="new-todo" placeholder="What needs to be done?" />
+          <form onSubmit={this.handleOnNewTodoSubmit}>
+            <input
+              className="new-todo"
+              placeholder="What needs to be done?"
+              value={this.state.newTodoText}
+              onKeyDown={this.handleNewTodoKeyDown}
+              onChange={this.handleNewTodoTextChange}
+            />
+          </form>
         </header>
 
         <section className="main">
@@ -19,7 +51,7 @@ class App extends React.Component {
           <label>Mark all as complete</label>
           <ul className="todo-list">
             {this.props.todos.map(todo => (
-              <li className={todo.completed ? 'completed' : ''} key={todo.text}>
+              <li className={todo.completed ? 'completed' : ''} key={todo.id}>
                 <div className="view">
                   <input
                     className="toggle"
@@ -78,7 +110,16 @@ const mapStateToProps = state => ({
   todos: selectTodos(state),
 })
 
+const mapDispatchToProps = dispatch => ({
+  dispatchAddTodo: function dispatchAddTodo(text) {
+    dispatch(addTodo(text))
+  },
+})
+
 export default compose(
   hot(module),
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(App)
