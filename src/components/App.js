@@ -1,5 +1,9 @@
-import React from 'react'
+import { connect } from 'react-redux'
 import { hot } from 'react-hot-loader'
+import React from 'react'
+import compose from 'lodash/fp/flowRight'
+
+import { selectTodos } from '../store/todos/todos.selectors'
 
 class App extends React.Component {
   render() {
@@ -14,14 +18,21 @@ class App extends React.Component {
           <input className="toggle-all" type="checkbox" />
           <label>Mark all as complete</label>
           <ul className="todo-list">
-            <li className="completed">
-              <div className="view">
-                <input className="toggle" type="checkbox" checked />
-                <label htmlFor="toggle">asdf</label>
-                <button className="destroy" />
-              </div>
-              <input className="edit" value="asdf" />
-            </li>
+            {this.props.todos.map(todo => (
+              <li className={todo.completed ? 'completed' : ''} key={todo.text}>
+                <div className="view">
+                  <input
+                    className="toggle"
+                    type="checkbox"
+                    checked={todo.completed}
+                  />
+                  <label htmlFor="toggle">{todo.text}</label>
+                  <button className="destroy" />
+                </div>
+                <input className="edit" value={todo.text} />
+              </li>
+            ))}
+            {/*
             <li className="editing">
               <div className="view">
                 <input className="toggle" type="checkbox" />
@@ -37,7 +48,7 @@ class App extends React.Component {
                 <button className="destroy" />
               </div>
               <input className="edit" value="asdf" />
-            </li>
+            </li> */}
           </ul>
         </section>
 
@@ -63,4 +74,11 @@ class App extends React.Component {
   }
 }
 
-export default hot(module)(App)
+const mapStateToProps = state => ({
+  todos: selectTodos(state),
+})
+
+export default compose(
+  hot(module),
+  connect(mapStateToProps),
+)(App)
