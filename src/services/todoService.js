@@ -5,13 +5,13 @@ import uuid from 'uuid'
 const TodoRecord = Record({
   id: '',
   text: '',
-  complete: false,
+  completed: false,
 })
 
 const createTodo = text => TodoRecord({ text, id: uuid.v4() })
 const delay = n => new Promise(resolve => setTimeout(resolve, n))
 
-function createTodoService() {
+export function createTodoService() {
   let todos = OrderedMap()
 
   return {

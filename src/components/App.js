@@ -6,7 +6,7 @@ import compose from 'lodash/fp/flowRight'
 import { addTodo, deleteTodo, setComplete } from '../store/todos/todos.actions'
 import { selectTodos } from '../store/todos/todos.selectors'
 
-class App extends React.Component {
+export class AppBase extends React.Component {
   state = {
     newTodoText: '',
   }
@@ -131,4 +131,4 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-)(App)
+)(AppBase)

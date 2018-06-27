@@ -1,11 +1,15 @@
 import { applyMiddleware, createStore } from 'redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
+import { createBrowserHistory } from 'history'
 import compose from 'lodash/fp/flowRight'
 import thunk from 'redux-thunk'
 
 import reducer from './store/rootReducer'
 
-export default function configureStore(initalState = {}, history) {
+export default function configureStore(
+  initalState = {},
+  history = createBrowserHistory(),
+) {
   const middlewares = [thunk, routerMiddleware(history)]
   const enhancers = [applyMiddleware(...middlewares)]
 
