@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader'
 import React from 'react'
 import compose from 'lodash/fp/flowRight'
 
-import { addTodo, deleteTodo } from '../store/todos/todos.actions'
+import { addTodo, deleteTodo, setComplete } from '../store/todos/todos.actions'
 import { selectTodos } from '../store/todos/todos.selectors'
 
 class App extends React.Component {
@@ -60,6 +60,9 @@ class App extends React.Component {
                     className="toggle"
                     type="checkbox"
                     checked={todo.completed}
+                    onChange={e =>
+                      this.props.dispatchSetCompleted(todo.id, e.target.checked)
+                    }
                   />
                   <label htmlFor="toggle">{todo.text}</label>
                   <button
@@ -119,6 +122,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   deleteTodo: id => dispatch(deleteTodo(id)),
   dispatchAddTodo: text => dispatch(addTodo(text)),
+  dispatchSetCompleted: (id, completed) => dispatch(setComplete(id, completed)),
 })
 
 export default compose(

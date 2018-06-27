@@ -19,6 +19,18 @@ export default function todosReducer(state = todoState, action) {
         ...state,
         records: state.records.filter(todo => todo.id !== action.payload),
       }
+    case 'SET_COMPLETE':
+      return {
+        ...state,
+        records: state.records.map(todo => {
+          if (todo.id === action.payload.id) {
+            return { ...todo, completed: action.payload.completed }
+          }
+
+          return todo
+        }),
+      }
+
     default:
       return state
   }
