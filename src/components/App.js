@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader'
 import React from 'react'
 import compose from 'lodash/fp/flowRight'
 
-import { addTodo } from '../store/todos/todos.actions'
+import { addTodo, deleteTodo } from '../store/todos/todos.actions'
 import { selectTodos } from '../store/todos/todos.selectors'
 
 class App extends React.Component {
@@ -26,7 +26,10 @@ class App extends React.Component {
   handleOnNewTodoSubmit = e => {
     e.stopPropagation()
     e.preventDefault()
-    this.props.dispatchAddTodo(this.state.newTodoText)
+    const trimmed = this.state.newTodoText.trim()
+    if (trimmed !== '') {
+      this.props.dispatchAddTodo(trimmed)
+    }
     this.setState({ newTodoText: '' })
   }
 
@@ -59,7 +62,10 @@ class App extends React.Component {
                     checked={todo.completed}
                   />
                   <label htmlFor="toggle">{todo.text}</label>
-                  <button className="destroy" />
+                  <button
+                    className="destroy"
+                    onClick={() => this.props.deleteTodo(todo.id)}
+                  />
                 </div>
                 <input className="edit" value={todo.text} />
               </li>
@@ -111,9 +117,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  dispatchAddTodo: function dispatchAddTodo(text) {
-    dispatch(addTodo(text))
-  },
+  deleteTodo: id => dispatch(deleteTodo(id)),
+  dispatchAddTodo: text => dispatch(addTodo(text)),
 })
 
 export default compose(

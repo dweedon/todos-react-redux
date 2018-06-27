@@ -14,6 +14,11 @@ export default function todosReducer(state = todoState, action) {
           { text: action.payload, completed: false, id: state.nextId },
         ],
       }
+    case 'DELETE_TODO':
+      return {
+        ...state,
+        records: state.records.filter(todo => todo.id !== action.payload),
+      }
     default:
       return state
   }
